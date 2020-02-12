@@ -46,29 +46,36 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-player1 = Player(input('Name?'), room['outside'])
+
+# Grabbing the room instance of outside, so we can access the name and description for future use.
+player = Player(input('Name? '), room['outside'])
+
+
 # Write a loop that:
 #
-# * Prints the current room name
+
 # * Prints the current description (the textwrap module might be useful here).
 # * Waits for user input and decides what to do.
 #
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+currentRoom = player.current_room
+print(f'Current Room: {currentRoom.name} \n {currentRoom.description}')
+
+# create a variable that holds the current players current room
+# * Prints the current room name
 while True:
-    # * Prints the current room name
-    currentRoom = player1.current_room
-    print(
-        f'Current Room: {currentRoom.name} \n {currentRoom.description}')
 
-    command = input('command: ').strip().lower().split(' ')
+    command = input('command: ')
+# If the user enters "q", quit the game.
+    if command[0] == 'q':
+        print('Thank you for playing and good bye!')
+        break
 
-    # if command[0] == 'q':
-    #     print('Thank you for playing and good bye!')
-    #     break
-    # # if command[0] == 'n':
+    if command[0] == 'n':
+        currentRoom = room['foyer']
+        print(
+            f'Current Room: {currentRoom.name} \n {currentRoom.description}')
 
-    # else:
-    #     print('please enter only n, s, e, w or q for quit')
+    else:
+        print('please enter only n, s, e, w or q for quit')
