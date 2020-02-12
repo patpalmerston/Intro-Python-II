@@ -1,9 +1,3 @@
-import cmd
-import textwrap
-import sys
-import os
-import time
-import random
 
 from room import Room
 from player import Player
@@ -45,37 +39,50 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
-# Make a new player object that is currently in the 'outside' room.
 
-# Grabbing the room instance of outside, so we can access the name and description for future use.
+# new instance of player with name and current room
 player = Player(input('Name? '), room['outside'])
 
-
-# Write a loop that:
-#
-
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-currentRoom = player.current_room
-print(f'Current Room: {currentRoom.name} \n {currentRoom.description}')
-
-# create a variable that holds the current players current room
-# * Prints the current room name
 while True:
+    # create a variable that holds the current players current room
+    current_room = player.current_room
+    # display the current room for the player after each turn
+    print(
+        f'Current Room: {current_room.name} \n {current_room.description}')
 
-    command = input('command: ')
-# If the user enters "q", quit the game.
+    command = input('command: ').strip().lower().split(' ')
+# Input Errors and "q", quit the game.
+    if command[0] not in ['n', 's', 'e', 'w', 'q']:
+        print("Please enter a valid direction")
+        continue
     if command[0] == 'q':
         print('Thank you for playing and good bye!')
         break
 
     if command[0] == 'n':
-        currentRoom = room['foyer']
-        print(
-            f'Current Room: {currentRoom.name} \n {currentRoom.description}')
+        if current_room.n_to is None:
+            print('Cant go that way')
+            continue
+        else:
+            player.current_room = current_room.n_to
+    elif command[0] == 's':
+        if current_room.s_to is None:
+            print('Cant go that way')
+            continue
+        else:
+            player.current_room = current_room.s_to
+    elif command[0] == 'e':
+        if current_room.e_to is None:
+            print('Cant go that way')
+            continue
+        else:
+            player.current_room = current_room.e_to
+    elif command[0] == 'w':
+        if current_room.w_to is None:
+            print('Cant go that way')
+            continue
+        else:
+            player.current_room = current_room.w_to
 
     else:
         print('please enter only n, s, e, w or q for quit')
