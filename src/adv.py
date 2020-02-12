@@ -1,4 +1,12 @@
+import cmd
+import textwrap
+import sys
+import os
+import time
+import random
+
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -38,7 +46,7 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-
+player1 = Player(input('Name?'), room['outside'])
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +57,18 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+while True:
+    # * Prints the current room name
+    currentRoom = player1.current_room
+    print(
+        f'Current Room: {currentRoom.name} \n {currentRoom.description}')
+
+    command = input('command: ').strip().lower().split(' ')
+
+    # if command[0] == 'q':
+    #     print('Thank you for playing and good bye!')
+    #     break
+    # # if command[0] == 'n':
+
+    # else:
+    #     print('please enter only n, s, e, w or q for quit')
