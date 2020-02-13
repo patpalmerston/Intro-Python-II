@@ -50,6 +50,8 @@ while True:
     print(
         f'Current Room: {current_room.name} \n {current_room.description}')
 
+    print(f'Avaialble Items: {current_room.items}')
+
     command = input('command: ').strip().lower().split(' ')
 # Input Errors and "q", quit the game.
     if command[0] not in ['n', 's', 'e', 'w', 'q']:
