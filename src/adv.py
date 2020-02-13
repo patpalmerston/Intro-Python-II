@@ -1,4 +1,4 @@
-
+from item import Item
 from room import Room
 from player import Player
 
@@ -23,6 +23,14 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+item = {
+    'staff': Item('Staff of Magius', 'You have found the War staff of the Red God Magius'),
+    'axe': Item("Flint's Axe", "Flint's axe uses magical properties to propel itself through all objects"),
+    'torch': Item("Silver Torch", "The silver torch shines with the light of a thousand stars"),
+    'quilt': Item("Dagor's Quilt", "Long ago the Demon Dagor created the quilt of space, use it to the best of you ability"),
+    'mirror': Item("Syron's Mirror", "Syron mirror of values, show you the path least taken")
+}
+
 
 # Link rooms together
 
@@ -35,9 +43,12 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
-# Main
-#
+# staff, axe, torch, quilt, mirror
+room['foyer'].items.append('staff')
+room['overlook'].items.append('axe')
+room['narrow'].items.append('quilt')
+room['treasure'].items.append('mirror')
+room['foyer'].items.append('torch')
 
 
 # new instance of player with name and current room
@@ -60,7 +71,7 @@ while True:
     if command[0] == 'q':
         print('Thank you for playing and good bye!')
         break
-
+# navigation
     if command[0] == 'n':
         if current_room.n_to is None:
             print('Cant go that way')
