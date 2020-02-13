@@ -64,8 +64,8 @@ while True:
     print(
         f'~~Avaialble Items in Room: {[item.name for item in player.current_room.get_items()]}')
 
-    print(
-        f'~~Players Current Inventory: {[item.name for item in player.get_inventory()]}')
+    # print(
+    #     f'~~Players Current Inventory: {[item.name for item in player.get_inventory()]}')
 
     command = input('command: ').strip().lower().split(' ')
 
@@ -73,7 +73,7 @@ while True:
     room_items = {
         item.name: item for item in player.current_room.get_items()}
     # loop through the players current items
-    player_items = {item.name for item in player.get_inventory()}
+    player_items = {item.name: item for item in player.get_inventory()}
 
     if len(command) == 1:
         # Input Errors and "q", quit the game.
@@ -109,13 +109,13 @@ while True:
             else:
                 player.current_room = current_room.w_to
         elif command[0] == 'i':
-            print(f'player inventory: {player.inventory}')
+            print(f'player inventory: {player.get_inventory()}')
 
-        else:
-            print('please enter only n, s, e, w or q for quit')
+    # else:
+    #     print('please enter only n, s, e, w or q for quit')
+
     # Items
-
-    if len(command) == 2:
+    elif len(command) == 2:
         # variable for first index
         verb = command[0]
         # variable for second index
@@ -126,14 +126,23 @@ while True:
                 print('Object not found in room')
                 continue
             else:
-                player.current_room.delete_item(room_items[item_name])
-                player.get_item(room_items[item_name])
-                room_items[item_name].pickup_item()
-        # elif verb == 'drop':
-        #     for item_name in player.inventory:
-        #         player.throw_item(item_name)
-        #         current_room.add_item(item_name)
-        #         print('current room items', current_room.get_items())
+                item = room_items[item_name]
 
-        else:
-            print("please use 'get' or 'take' and item name, to pick up or drop item.")
+                player.current_room.delete_item(item)
+                player.get_item(item)
+                item.pickup_item()
+
+        elif verb == 'drop':
+            print(room_items)
+            if item_name not in room_items:
+                item = player_items[item_name]
+
+                player.throw_item(item)
+                player.current_room.add_item(item)
+                item.drop_item()
+            else:
+                print('Object is not in your inventory')
+                continue
+
+    else:
+        print("Please use 'get' or 'take' and item name, to pick up or drop item. Please enter only n, s, e, w or q for quit")
