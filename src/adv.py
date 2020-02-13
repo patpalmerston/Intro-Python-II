@@ -64,38 +64,49 @@ while True:
     print(f'Avaialble Items: {current_room.items}')
 
     command = input('command: ').strip().lower().split(' ')
-# Input Errors and "q", quit the game.
-    if command[0] not in ['n', 's', 'e', 'w', 'q']:
-        print("Please enter a valid direction")
-        continue
-    if command[0] == 'q':
-        print('Thank you for playing and good bye!')
-        break
-# navigation
-    if command[0] == 'n':
-        if current_room.n_to is None:
-            print('Cant go that way')
+    if len(command) == 1:
+        # Input Errors and "q", quit the game.
+        if command[0] not in ['n', 's', 'e', 'w', 'q']:
+            print("Please enter a valid direction")
             continue
-        else:
-            player.current_room = current_room.n_to
-    elif command[0] == 's':
-        if current_room.s_to is None:
-            print('Cant go that way')
-            continue
-        else:
-            player.current_room = current_room.s_to
-    elif command[0] == 'e':
-        if current_room.e_to is None:
-            print('Cant go that way')
-            continue
-        else:
-            player.current_room = current_room.e_to
-    elif command[0] == 'w':
-        if current_room.w_to is None:
-            print('Cant go that way')
-            continue
-        else:
-            player.current_room = current_room.w_to
+        if command[0] == 'q':
+            print('Thank you for playing and good bye!')
+            break
+    # navigation
+        if command[0] == 'n':
+            if current_room.n_to is None:
+                print('Cant go that way')
+                continue
+            else:
+                player.current_room = current_room.n_to
+        elif command[0] == 's':
+            if current_room.s_to is None:
+                print('Cant go that way')
+                continue
+            else:
+                player.current_room = current_room.s_to
+        elif command[0] == 'e':
+            if current_room.e_to is None:
+                print('Cant go that way')
+                continue
+            else:
+                player.current_room = current_room.e_to
+        elif command[0] == 'w':
+            if current_room.w_to is None:
+                print('Cant go that way')
+                continue
+            else:
+                player.current_room = current_room.w_to
 
-    else:
-        print('please enter only n, s, e, w or q for quit')
+        else:
+            print('please enter only n, s, e, w or q for quit')
+    # Items
+    if len(command) == 2:
+        if command[0] == 'get' or 'take':
+            for command[1] in current_room.items:
+                player.get_item(command[1])
+                current_room.delete_item(command[1])
+                print('player items', player.get_inventory())
+
+        else:
+            print("please use 'get' or 'take' and item name, to pick up item.")
