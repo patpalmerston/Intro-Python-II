@@ -24,11 +24,11 @@ earlier adventurers. The only exit is to the south."""),
 }
 
 item = {
-    'staff': Item('Staff of Magius', 'You have found the War staff of the Red God Magius'),
-    'axe': Item("Flint's Axe", "Flint's axe uses magical properties to propel itself through all objects"),
-    'torch': Item("Silver Torch", "The silver torch shines with the light of a thousand stars"),
-    'quilt': Item("Dagor's Quilt", "Long ago the Demon Dagor created the quilt of space, use it to the best of you ability"),
-    'mirror': Item("Syron's Mirror", "Syron mirror of values, show you the path least taken")
+    'staff': Item('staff', 'You have found the War staff of the Red God Magius'),
+    'axe': Item("axe", "Flint's axe uses magical properties to propel itself through all objects"),
+    'torch': Item("torch", "The silver torch shines with the light of a thousand stars"),
+    'quilt': Item("quilt", "Long ago the Demon Dagor created the quilt of space, use it to the best of you ability"),
+    'mirror': Item("mirror", "Syron mirror of values, show you the path least taken")
 }
 
 
@@ -44,11 +44,11 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
 # staff, axe, torch, quilt, mirror
-room['foyer'].items.append('staff')
-room['overlook'].items.append('axe')
-room['narrow'].items.append('quilt')
-room['treasure'].items.append('mirror')
-room['foyer'].items.append('torch')
+room['foyer'].add_item(item['staff'])
+room['overlook'].add_item(item['axe'])
+room['narrow'].add_item(item['quilt'])
+room['treasure'].add_item(item['mirror'])
+room['foyer'].add_item(item['torch'])
 
 
 # new instance of player with name and current room
@@ -59,14 +59,25 @@ while True:
     current_room = player.current_room
     # display the current room for the player after each turn
     print(
-        f'Current Room: {current_room.name} \n {current_room.description}')
+        f'~Current Room: {current_room.name} \n {current_room.description}')
 
-    print(f'Avaialble Items: {current_room.items}')
+    print(
+        f'~~Avaialble Items in Room: {[item.name for item in player.current_room.get_items()]}')
+
+    print(
+        f'~~Players Current Inventory: {[item.name for item in player.get_inventory()]}')
 
     command = input('command: ').strip().lower().split(' ')
+
+    # loop through the current items in the room
+    room_items = {
+        item.name: item for item in player.current_room.get_items()}
+    # loop through the players current items
+    player_items = {item.name for item in player.get_inventory()}
+
     if len(command) == 1:
         # Input Errors and "q", quit the game.
-        if command[0] not in ['n', 's', 'e', 'w', 'q']:
+        if command[0] not in ['n', 's', 'e', 'w', 'i', 'q']:
             print("Please enter a valid direction")
             continue
         if command[0] == 'q':
@@ -97,16 +108,32 @@ while True:
                 continue
             else:
                 player.current_room = current_room.w_to
+        elif command[0] == 'i':
+            print(f'player inventory: {player.inventory}')
 
         else:
             print('please enter only n, s, e, w or q for quit')
     # Items
+
     if len(command) == 2:
-        if command[0] == 'get' or 'take':
-            for command[1] in current_room.items:
-                player.get_item(command[1])
-                current_room.delete_item(command[1])
-                print('player items', player.get_inventory())
+        # variable for first index
+        verb = command[0]
+        # variable for second index
+        item_name = command[1]
+
+        if verb == 'get' or verb == 'take':
+            if item_name not in room_items:
+                print('Object not found in room')
+                continue
+            else:
+                player.current_room.delete_item(room_items[item_name])
+                player.get_item(room_items[item_name])
+                room_items[item_name].pickup_item()
+        # elif verb == 'drop':
+        #     for item_name in player.inventory:
+        #         player.throw_item(item_name)
+        #         current_room.add_item(item_name)
+        #         print('current room items', current_room.get_items())
 
         else:
-            print("please use 'get' or 'take' and item name, to pick up item.")
+            print("please use 'get' or 'take' and item name, to pick up or drop item.")

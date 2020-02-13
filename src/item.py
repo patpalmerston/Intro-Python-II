@@ -10,7 +10,7 @@ class Item:
         return f"Name: {self.name} \n Description: {self.description}"
 
     def pickup_item(self):
-        return f"you picked up {self.name}"
+        print(f"******Well DONE! You picked up the {self.name}!!!******")
 
     def drop_item(self):
-        return f"you dropped the {self.name}"
+        print(f"******Looks like you dropped the {self.name}!******")
